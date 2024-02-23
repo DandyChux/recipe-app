@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgresDB:/data/postgres
+    env_file:
+      - ./.env.local
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgAdmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
+    env_file:
+      - ./.env.local
+    ports:
+      - "5050:80"
+
+  server:
+    image: dandychux/rusty_melody-api
+    build:
+      context: . # The path to Dockerfile in relation to the docker-compose file
+      dockerfile: Dockerfile.server # The name of the Dockerfile
+      target: development
+    ports:
+      - "8000:8000" # Map port 8000 on the host to port 8000 on the container to expose the app
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env.local
+
+  client:
+    image: dandychux/rusty_melody-client
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+      target: development
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    env_file:
+      - ./.env.local
+
+volumes:
+  postgresDB:
