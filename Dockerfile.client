@@ -39,10 +39,7 @@ COPY Cargo.lock /app/Cargo.lock
 COPY ./common /app/common
 RUN echo "Source code has been copied."
 
-RUN --mount=type=cache,target=/app/target/,id=rust-cache-${APP_NAME}-${TARGETPLATFORM} \
-    --mount=type=cache,target=/usr/local/cargo/git/db \
-    --mount=type=cache,target=/usr/local/cargo/registry/ \
-    xx-cargo build --locked --release --target-dir ./target && \
+RUN xx-cargo build --locked --release --target-dir ./target && \
     cp ./target/$(xx-cargo --print-target-triple)/release/$APP_NAME /bin/client && \
     xx-verify /bin/client
 
