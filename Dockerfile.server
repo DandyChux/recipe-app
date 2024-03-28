@@ -33,16 +33,17 @@ RUN xx-apk add --no-cache musl-dev gcc
 # Leverage a bind mount to the src directory to avoid having to copy the
 # source code into the container. Once built, copy the executable to an
 # output directory before the cache mounted /app/target is unmounted.
-RUN --mount=type=bind,source=./server/src,target=./src \
-    --mount=type=bind,source=./server/Cargo.toml,target=./Cargo.toml \
-    --mount=type=bind,source=./Cargo.lock,target=./Cargo.lock \
-    --mount=type=bind,source=./common,target=./common \
-    --mount=type=cache,target=/app/target/,id=rust-cache-${APP_NAME}-${TARGETPLATFORM} \
+COPY ./server/src ./src
+COPY ./server/Cargo.toml ./Cargo.toml
+COPY ./Cargo.lock ./Cargo.lock
+COPY ./common ./common
+
+RUN --mount=type=cache,target=/app/target/,id=rust-cache-${APP_NAME}-${TARGETPLATFORM} \
     --mount=type=cache,target=/usr/local/cargo/git/db \
     --mount=type=cache,target=/usr/local/cargo/registry/ \
-xx-cargo build --locked --release --target-dir ./target && \
-cp ./target/$(xx-cargo --print-target-triple)/release/$APP_NAME /bin/server && \
-xx-verify /bin/server
+    xx-cargo build --locked --release --target-dir ./target && \
+    cp ./target/$(xx-cargo --print-target-triple)/release/$APP_NAME /bin/server && \
+    xx-verify /bin/server
 
 ################################################################################
 # Create a new stage for running the application that contains the minimal
