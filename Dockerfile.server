@@ -37,6 +37,7 @@ COPY ./server/src ./src
 COPY ./server/Cargo.toml ./Cargo.toml
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./common ./common
+RUN echo "Source code has been copied."
 
 RUN --mount=type=cache,target=/app/target/,id=rust-cache-${APP_NAME}-${TARGETPLATFORM} \
     --mount=type=cache,target=/usr/local/cargo/git/db \

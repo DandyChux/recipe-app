@@ -27,6 +27,18 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Build and push client image
+      uses: docker/build-push-action@v5
+      with:
+        context: . # Location of the Dockerfile relative to the root of the repository
+        file: ./Dockerfile.client
+        target: final
+        platforms: linux/amd64,linux/arm64
+        push: true
+        tags: |
+            dandychux/rusty-melody-client:latest
+            ghcr.io/dandychux/rusty-melody-client:latest
+
     - name: Build and push server image
       uses: docker/build-push-action@v5
       with:
@@ -39,14 +51,3 @@ jobs:
             dandychux/rusty-melody-server:latest
             ghcr.io/dandychux/rusty-melody-server:latest
 
-    - name: Build and push client image
-      uses: docker/build-push-action@v5
-      with:
-        context: . # Location of the Dockerfile relative to the root of the repository
-        file: ./Dockerfile.client
-        target: final
-        platforms: linux/amd64,linux/arm64
-        push: true
-        tags: |
-            dandychux/rusty-melody-client:latest
-            ghcr.io/dandychux/rusty-melody-client:latest
