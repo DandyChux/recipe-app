@@ -8,8 +8,14 @@ use yew::prelude::*;
 use yew_router::prelude::*;
 use yewdux::prelude::*;
 
+#[derive(Clone, Debug, Properties, PartialEq)]
+pub struct HeaderProps {
+    #[prop_or_default]
+    pub class: String,
+}
+
 #[function_component(Header)]
-pub fn header_component() -> Html {
+pub fn header_component(props: &HeaderProps) -> Html {
     let (store, dispatch) = use_store::<Store>();
     let user = store.auth_user.clone();
     let navigator = use_navigator().unwrap();
@@ -40,8 +46,14 @@ pub fn header_component() -> Html {
         })
     };
 
+    let class = classes!(
+        "h-20",
+        "bg-background",
+        props.class.clone()
+    );
+
     html! {
-        <header class="h-20 bg-background">
+        <header class={class}>
             <nav class="container flex items-center justify-between h-full">
                 <div>
                     <Link<Route> to={Route::HomePage} classes="font-bold">{"Rusty Melody"}</Link<Route>>

@@ -24,10 +24,12 @@ pub fn app() -> Html {
 
     html! {
         <BrowserRouter>
-            <Header />
-            <main class="h-[calc(100dvh-80px)]">
-                <Switch<Route> render={switch} />
-            </main>
+            <div class="relative flex flex-col h-full lg:flex-row lg:flex-1">
+                <Header class="w-full lg:basis-[20%] 2xl:basis-[25%]" />
+                <main class="lg:basis-[80%] 2xl:basis-[75%]">
+                    <Switch<Route> render={switch} />
+                </main>
+            </div>
             
             if show_alert {
                 <AlertComponent
