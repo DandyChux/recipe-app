@@ -8,8 +8,9 @@ use axum_extra::extract::cookie::CookieJar;
 use common::schema::feedback::ErrorResponse;
 use jsonwebtoken::{decode, DecodingKey, Validation};
 use tokio::sync::RwLock;
+use regex::Regex;
 
-use crate::{model::Users, utils::jwt::TokenClaims, AppState};
+use crate::{model::Users, utils::jwt::AccessClaims, AppState};
 
 /// Axum JWT Authentication Middleware.
 pub async fn auth(
@@ -18,8 +19,14 @@ pub async fn auth(
     mut req: Request<Body>,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, Json<ErrorResponse>)> {
+    let path = Regex::new(r"^/api/healthchecker$|^/api/auth/.*").unwrap();
+    if path.is_match(req.uri().path()) {
+        // If the request is for the healthchecker, we call the next middleware.
+        return Ok(next.run(req).await);
+    }
+
     let token = cookie_jar
-        .get("token") // We try to get the token from the cookie
+        .get("access_token") // We try to get the token from the cookie
         .map(|cookie| cookie.value().to_string())
         .or_else(|| {
             // Otherwise, we try to get it from the authorization header
@@ -30,7 +37,7 @@ pub async fn auth(
                     if auth_value.starts_with("Bearer ") {
                         Some(auth_value[7..].to_owned())
                     } else {
-                        None
+                        auth_value.parse().ok()
                     }
                 })
         });
@@ -38,24 +45,14 @@ pub async fn auth(
     // If the token is none, we return UNAUTHORIZED.
     let token = token.ok_or_else(|| {
         let json_error = ErrorResponse {
-            status: "fail",
+            status: "fail".to_string(),
             message: "You are not logged in, please provide token".to_string(),
         };
 
         (StatusCode::UNAUTHORIZED, Json(json_error))
     })?;
 
-    // If the token does not start with "Bearer ", we return UNAUTHORIZED.
-    if !token.starts_with("Bearer ") {
-        let json_error = ErrorResponse {
-            status: "fail",
-            message: "Invalid token".to_string(),
-        };
-
-        return Err((StatusCode::UNAUTHORIZED, Json(json_error)));
-    };
-
-    let claims = decode::<TokenClaims>(
+    let claims = decode::<AccessClaims>(
         &token,
         &DecodingKey::from_secret(app_state.clone().read().await.env.jwt_secret.as_ref()),
         &Validation::default(),
@@ -63,7 +60,7 @@ pub async fn auth(
     .map_err(|_| {
         // We return UNAUTHORIZED if the token fails validation for some reason.
         let json_error = ErrorResponse {
-            status: "fail",
+            status: "fail".to_string(),
             message: "Invalid token".to_string(),
         };
 
@@ -76,7 +73,7 @@ pub async fn auth(
     let user_id = uuid::Uuid::parse_str(&claims.sub).map_err(|_| {
         // If the id is incorrectly formed, we return an error.
         let json_error = ErrorResponse {
-            status: "fail",
+            status: "fail".to_string(),
             message: "Invalid token".to_string(),
         };
 
@@ -93,7 +90,7 @@ pub async fn auth(
     .await
     .map_err(|err| {
         let json_error = ErrorResponse {
-            status: "fail",
+            status: "fail".to_string(),
             message: format!("Error querying the database: {}", err),
         };
 

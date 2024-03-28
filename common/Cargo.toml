@@ -8,4 +8,7 @@ edition = "2021"
 [dependencies]
 chrono = { version = "0.4.34", features = ["serde"] }
 serde = { version = "1.0.196", features = ["derive"] }
+strum = "0.26.2"
+strum_macros = "0.26.2"
 uuid = { version = "1.7.0", features = ["serde", "v4", "js"] }
+validator = { version = "0.16.1", features = ["derive"] }

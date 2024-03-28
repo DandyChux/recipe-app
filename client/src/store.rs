@@ -2,6 +2,8 @@ use common::schema::feedback::Feedback;
 use serde::{Deserialize, Serialize};
 use yewdux::prelude::*;
 
+use common::schema::user::FilteredUser as User;
+
 #[derive(Debug, PartialEq, Serialize, Deserialize, Default, Clone)]
 pub struct AlertInput {
     pub show_alert: bool,
@@ -14,6 +16,9 @@ pub struct Store {
     pub feedbacks: Vec<Feedback>,
     pub loading: bool,
     pub alert_input: AlertInput,
+    pub auth_user: Option<User>,
+    pub access_token: Option<String>,
+    pub refresh_token: Option<String>,
 }
 
 pub fn set_feedback(feedback: Feedback, dispatch: Dispatch<Store>) {
@@ -52,5 +57,23 @@ pub fn set_show_alert(message: String, dispatch: Dispatch<Store>) {
 pub fn set_hide_alert(dispatch: Dispatch<Store>) {
     dispatch.reduce_mut(move |store| {
         store.alert_input.show_alert = false;
+    })
+}
+
+pub fn set_auth_user(user: Option<User>, dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.auth_user = user;
+    })
+}
+
+pub fn set_access_token(token: Option<String>, dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.access_token = token;
+    })
+}
+
+pub fn set_refresh_token(token: Option<String>, dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.refresh_token = token;
     })
 }

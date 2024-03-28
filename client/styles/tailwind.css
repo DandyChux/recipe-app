@@ -74,7 +74,7 @@
         --tertiary-foreground: 0 0% 15%; 
     
         --accent: 12 6.5% 15.1%;
-        --accent-foreground: 0 0% 98%;
+        --accent-foreground: 0 0% 12%;
     
         --neutral: 0 0% 10%; 
         --neutral-foreground: 0 0% 94%; 
@@ -121,6 +121,10 @@
 
     section {
         @apply mt-2 px-8 w-full
+    }
+
+    li {
+        @apply hover:underline;
     }
 
     .container {

@@ -28,6 +28,6 @@ pub struct FeedbackListResponse {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ErrorResponse {
-    pub status: &'static str,
+    pub status: String,
     pub message: String,
 }

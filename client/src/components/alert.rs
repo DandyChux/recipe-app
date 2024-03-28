@@ -10,8 +10,8 @@ pub struct AlertProps {
     pub delay_ms: u32,
 }
 
-#[function_component]
-pub fn AlertComponent(props: &AlertProps) -> Html {
+#[function_component(AlertComponent)]
+pub fn alert_component(props: &AlertProps) -> Html {
     let (store, dispatch) = use_store::<Store>();
     let show_alert = store.alert_input.show_alert;
 
@@ -37,9 +37,9 @@ pub fn AlertComponent(props: &AlertProps) -> Html {
     );
 
     html! {
-    <div id="myToast" class={format!("fixed top-14 right-10 px-5 py-4 border-r-8 border-orange-500 bg-white drop-shadow-lg {}", if show_alert { "" } else { "hidden" })}>
+    <div id="myToast" class={format!("fixed top-14 right-10 px-5 py-4 border-r-8 border-warning bg-popover text-popover-foreground drop-shadow-lg {}", if show_alert { "" } else { "hidden" })}>
         <p class="text-sm">
-            <span class="inline-block px-3 py-1 mr-2 font-extrabold text-white bg-blue-500 rounded-full">{"i"}</span>
+            <span class="inline-block px-3 py-1 mr-2 font-extrabold rounded-full text-foreground bg-info">{"i"}</span>
             {props.message.clone()}
         </p>
     </div>
