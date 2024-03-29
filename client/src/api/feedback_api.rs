@@ -6,7 +6,7 @@ pub async fn api_create_feedback(feedback_data: &str) -> Result<Feedback, String
     let api_url = "http://localhost:8000";
 
     #[cfg(not(debug_assertions))]
-    let api_url = std::env!("API_URL");
+    let api_url = std::env!("SERVER_URL");
     let url = format!("{}/api/feedbacks/", api_url);
 
     let response = match http::Request::post(&url)
@@ -40,7 +40,7 @@ pub async fn _api_fetch_single_feedback(feedback_id: &str) -> Result<Feedback, S
     let api_url = "http://localhost:8000";
 
     #[cfg(not(debug_assertions))]
-    let api_url = std::env!("API_URL");
+    let api_url = std::env!("SERVER_URL");
     let url = format!("{}/api/feedbacks/{}", api_url, feedback_id);
 
     let response = match http::Request::get(&url)
@@ -72,7 +72,7 @@ pub async fn api_fetch_feedbacks((page, limit): (i32, i32)) -> Result<Vec<Feedba
     let api_url = "http://localhost:8000";
 
     #[cfg(not(debug_assertions))]
-    let api_url = std::env!("API_URL");
+    let api_url = std::env!("SERVER_URL");
     let url = format!("{}/api/feedbacks?page={}&limit={}", api_url, page, limit);
     let response = match http::Request::get(&url)
     .send()
@@ -103,7 +103,7 @@ pub async fn api_delete_feedback(feedback_id: &str) -> Result<(), String> {
     let api_url = "http://localhost:8000";
 
     #[cfg(not(debug_assertions))]
-    let api_url = std::env!("API_URL");
+    let api_url = std::env!("SERVER_URL");
     let url = format!("{}/api/feedbacks/{}", api_url, feedback_id);
     let response = match http::Request::delete(&url)
     .send()

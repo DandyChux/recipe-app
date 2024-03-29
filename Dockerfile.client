@@ -1,5 +1,7 @@
 ARG RUST_VERSION=1.75.0
 ARG APP_NAME=client
+ARG SERVER_URL
+ARG CLIENT_URL
 
 ################################################################################
 # xx is a helper for cross-compilation.
@@ -43,6 +45,13 @@ RUN echo "Source code has been copied."
 # RUN ln -s /app/common /app/src/common
 
 RUN ls -la /app
+
+ARG SERVER_URL
+ARG CLIENT_URL
+
+# Set the environment variables for the client
+ENV SERVER_URL=$SERVER_URL
+ENV CLIENT_URL=$CLIENT_URL
 
 # CD into the client directory
 WORKDIR /app/client

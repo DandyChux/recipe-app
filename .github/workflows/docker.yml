@@ -26,33 +26,6 @@ jobs:
         registry: ghcr.io
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
-
-    # - name: Build with Docker Compose
-    #   run: |
-    #     docker-compose -f docker-compose.prod.yml build      
-
-    # - name: Push Server Image
-    #   run: |
-    #     docker push dandychux/rusty-melody-server:latest
-    #     docker push ghcr.io/dandychux/rusty-melody-server:latest
-    #   env:
-    #     DATABASE_URL: ${{ env.DATABASE_URL }}
-    #     JWT_EXPIRED_IN: ${{ env.JWT_EXPIRED_IN }}
-    #     JWT_MAXAGE: ${{ env.JWT_MAXAGE }}
-    #     JWT_SECRET: ${{ env.JWT_SECRET }}
-    #     POSTGRES_DB: ${{ env.POSTGRES_DB }}
-    #     POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
-    #     POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-    #     POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
-    #     POSTGRES_USER: ${{ env.POSTGRES_USER }}
-      
-    # - name: Push Client Image
-    #   run: |
-    #     docker push dandychux/rusty-melody-client:latest
-    #     docker push ghcr.io/dandychux/rusty-melody-client:latest
-    #   env:
-    #     SERVER_URL: ${{ env.SERVER_URL }}
-    #     CLIENT_URL: ${{ env.CLIENT_URL }}
       
     - name: Build and push client image
       uses: docker/build-push-action@v5
@@ -65,6 +38,9 @@ jobs:
         tags: |
             dandychux/rusty-melody-client:latest
             ghcr.io/dandychux/rusty-melody-client:latest
+        build-args: |
+            SERVER_URL=${{ secrets.SERVER_URL }}
+            CLIENT_URL=${{ secrets.CLIENT_URL }}
 
     - name: Build and push server image
       uses: docker/build-push-action@v5
@@ -77,4 +53,15 @@ jobs:
         tags: |
             dandychux/rusty-melody-server:latest
             ghcr.io/dandychux/rusty-melody-server:latest
+        build-args: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            SERVER_PORT=${{ secrets.SERVER_PORT }}
+            JWT_EXPIRED_IN=${{ secrets.JWT_EXPIRED_IN }}
+            JWT_MAXAGE=${{ secrets.JWT_MAXAGE }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+            POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
 
