@@ -40,7 +40,9 @@ COPY ./common ./common
 RUN echo "Source code has been copied."
 
 # Create a symlink to mimic the original project structure expected by Cargo.toml
-RUN ln -s /app/common /app/src/../common
+RUN ln -s /app/common /app/src/common
+
+RUN ls -la /app && ls -la /app/src && ls -la /app/common
 
 RUN --mount=type=cache,target=/app/target/,id=rust-cache-${APP_NAME}-${TARGETPLATFORM} \
     --mount=type=cache,target=/usr/local/cargo/git/db \
