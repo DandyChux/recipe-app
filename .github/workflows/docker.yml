@@ -37,7 +37,6 @@ jobs:
         push: true
         tags: |
             dandychux/rusty-melody-client:latest
-            ghcr.io/dandychux/rusty-melody-client:latest
         build-args: |
             SERVER_URL=${{ secrets.SERVER_URL }}
             CLIENT_URL=${{ secrets.CLIENT_URL }}
@@ -52,7 +51,6 @@ jobs:
         push: true
         tags: |
             dandychux/rusty-melody-server:latest
-            ghcr.io/dandychux/rusty-melody-server:latest
         build-args: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             SERVER_PORT=${{ secrets.SERVER_PORT }}
