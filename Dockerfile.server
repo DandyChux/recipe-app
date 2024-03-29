@@ -33,16 +33,14 @@ RUN xx-apk add --no-cache musl-dev gcc
 # Leverage a bind mount to the src directory to avoid having to copy the
 # source code into the container. Once built, copy the executable to an
 # output directory before the cache mounted /app/target is unmounted.
-COPY ./server/src ./src
-COPY ./server/Cargo.toml ./Cargo.toml
+COPY ./server ./server
+# COPY ./server/Cargo.toml ./Cargo.toml
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./common ./common
 RUN echo "Source code has been copied."
 
 # Create a symlink to mimic the original project structure expected by Cargo.toml
-RUN ln -s /app/common /app/src/common
-
-RUN ls -la /app && ls -la /app/src && ls -la /app/common
+# RUN ln -s /app/common /app/src/common
 
 RUN --mount=type=cache,target=/app/target/,id=rust-cache-${APP_NAME}-${TARGETPLATFORM} \
     --mount=type=cache,target=/usr/local/cargo/git/db \
