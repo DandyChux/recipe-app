@@ -20,6 +20,12 @@ pub fn header_component(props: &HeaderProps) -> Html {
     let user = store.auth_user.clone();
     let navigator = use_navigator().unwrap();
 
+    // Get the current route
+    let route = use_route::<Route>().unwrap();
+    if route == Route::LoginPage || route == Route::RegisterPage {
+        return html! { };
+    }
+
     let handle_logout = {
         let store_dispatch = dispatch.clone();
         let cloned_navigator = navigator.clone();

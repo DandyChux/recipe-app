@@ -203,35 +203,3 @@ pub async fn api_logout_user() -> Result<(), String> {
 
     Ok(())
 }
-
-pub async fn api_get_platforms() -> Result<Vec<String>, String> {
-    #[cfg(debug_assertions)]
-    let api_url = "http://localhost:8000";
-    #[cfg(not(debug_assertions))]
-    let api_url = std::env!("SERVER_URL");
-
-    let url = format!("{}/platforms", api_url);
-
-    let response = match http::Request::get(&url)
-        .send()
-        .await
-    {
-        Ok(res) => res,
-        Err(_) => return Err("Failed to make request".to_string()),
-    };
-
-    if response.status() != 200 {
-        let error_response = response.json::<ErrorResponse>().await;
-        if let Ok(error_response) = error_response {
-            return Err(error_response.message);
-        }
-        
-        return Err(format!("API error: {}", response.status()));
-    }
-
-    let res_json = response.json::<Vec<String>>().await;
-    match res_json {
-        Ok(data) => Ok(data),
-        Err(_) => Err("Failed to parse response".to_string()),
-    }
-}

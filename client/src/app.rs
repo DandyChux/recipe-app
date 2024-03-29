@@ -26,7 +26,7 @@ pub fn app() -> Html {
         <BrowserRouter>
             <div class="relative flex flex-col h-full lg:flex-row lg:flex-1">
                 <Header class="w-full lg:basis-[20%] 2xl:basis-[25%]" />
-                <main class="lg:basis-[80%] 2xl:basis-[75%]">
+                <main class="lg:grow lg:basis-[80%] 2xl:basis-[75%]">
                     <Switch<Route> render={switch} />
                 </main>
             </div>
