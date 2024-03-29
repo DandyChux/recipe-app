@@ -9,8 +9,6 @@ services:
       target: final
     ports:
       - "8000:8000" # Map port 8000 on the host to port 8000 on the container to expose the app
-    depends_on:
-      - postgres
     # env_file:
     #   - ./.env
     environment:
