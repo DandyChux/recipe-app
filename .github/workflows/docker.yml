@@ -35,11 +35,24 @@ jobs:
       run: |
         docker push dandychux/rusty-melody-server:latest
         docker push ghcr.io/dandychux/rusty-melody-server:latest
+      env:
+        DATABASE_URL: ${{ env.DATABASE_URL }}
+        JWT_EXPIRED_IN: ${{ env.JWT_EXPIRED_IN }}
+        JWT_MAXAGE: ${{ env.JWT_MAXAGE }}
+        JWT_SECRET: ${{ env.JWT_SECRET }}
+        POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+        POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+        POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
+        POSTGRES_USER: ${{ env.POSTGRES_USER }}
       
     - name: Push Client Image
       run: |
         docker push dandychux/rusty-melody-client:latest
         docker push ghcr.io/dandychux/rusty-melody-client:latest
+      env:
+        SERVER_URL: ${{ env.SERVER_URL }}
+        CLIENT_URL: ${{ env.CLIENT_URL }}
       
     # - name: Build and push client image
     #   uses: docker/build-push-action@v5
