@@ -78,6 +78,24 @@ async fn main() {
         env: config.clone(),
     }));
 
+    // sqlx::migrate!("./migrations")
+    //     .run(&pool)
+    //     .await
+    //     .unwrap_or_else(|err| panic!("Failed to run migrations: {}", err));
+    let mut migrations = match sqlx::migrate!("./migrations")
+        .run(&pool)
+        .await
+        {
+            Ok(migrations) => {
+                println!("✅Migrations ran successfully");
+                migrations
+            },
+            Err(err) => {
+                println!("❌Failed to run migrations: {}", err);
+                return;
+            }
+        };
+
     let app = Router::new()
         .merge(routes::user_routes::user_routes())
         .merge(routes::auth_routes::auth_routes())

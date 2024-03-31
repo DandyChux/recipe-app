@@ -1,0 +1,34 @@
+name: Migrate database
+
+on:
+    pull_request:
+    push:
+      branches:
+        - main
+    workflow_dispatch: 
+
+jobs:
+    migrate:
+      runs-on: ubuntu-latest
+      environment: production
+      # env:
+      #   SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      #   SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+      #   PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
+
+      steps:
+        - uses : actions/checkout@v3
+
+        - name: Set up Rust
+          uses: actions-rs/toolchain@v1
+          with:
+            toolchain: stable
+            override: true
+
+        - name: Install sqlx CLI
+          run: cargo install sqlx-cli --no-default-features --features native-tls,postgres
+
+        - name: Run Migrations
+          env: 
+            DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          run: sqlx migrate run

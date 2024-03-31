@@ -9,13 +9,13 @@ pub struct Config {
 impl Config {
     pub fn init() -> Config {
         // Conditional function to load env file based on environment
-    if cfg!(debug_assertions) {
-        // Load from `.env.local` in development
-        dotenv::from_filename(".env.local").ok().expect("Failed to load .env.local file");
-    } else {
-        // Load from `.env` in production
-        dotenv::dotenv().ok().expect("Failed to load .env file");
-    }
+        if cfg!(debug_assertions) {
+            // Load from `.env.local` in development
+            dotenv::from_filename(".env.local").ok().expect("Failed to load .env.local file");
+        } else {
+            // Load from `.env` in production
+            dotenv::dotenv().ok().expect("Failed to load .env file");
+        }
 
         let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
         let jwt_secret = std::env::var("JWT_SECRET").expect("JWT_SECRET must be set");
