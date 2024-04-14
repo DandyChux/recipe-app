@@ -112,6 +112,12 @@ pub struct Songs {
     album_id: uuid::Uuid,
     duration: u16,
     genre: Genre,
+    tempo: f32,
+    time_signature: u8,
+    key: u8,
+    loudness: f32,
+    speechiness: f32,
+    danceability: f32,
     external_url: Vec<String>,
 }
 
@@ -119,7 +125,9 @@ pub struct Songs {
 pub struct Artists {
     artist_id: uuid::Uuid,
     name: String,
-    genre: String,
+    albums: Vec<uuid::Uuid>, // List of album ids
+    genres: Vec<Genre>,
+    tracks: Vec<uuid::Uuid>, // List of song ids
 }
 
 #[derive(Debug, Deserialize, sqlx::FromRow, Serialize, Clone)]
@@ -128,6 +136,9 @@ pub struct Albums {
     title: String,
     artist_id: uuid::Uuid,
     release_date: DateTime<Utc>,
+    genre: Genre,
+    cover: String, // URL to album cover
+    tracks: Vec<uuid::Uuid>, // List of song ids
 }
 
 #[derive(Debug, Deserialize, sqlx::FromRow, Serialize, Clone)]

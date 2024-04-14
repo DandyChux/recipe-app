@@ -31,3 +31,12 @@ pub struct ErrorResponse {
     pub status: String,
     pub message: String,
 }
+
+impl ErrorResponse {
+    pub fn new(message: &str) -> Self {
+        Self {
+            status: "error".to_string(),
+            message: message.to_string(),
+        }
+    }
+}

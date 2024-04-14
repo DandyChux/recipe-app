@@ -6,6 +6,7 @@ use crate::components::{
     ui::spinner::Spinner,
     header::Header
 };
+use web_sys::window;
 
 use crate::router::{Route, switch};
 use crate::store::Store;

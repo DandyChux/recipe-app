@@ -175,6 +175,7 @@ pub fn login_page() -> Html {
                     <Button
                         loading={store.loading}
                         btn_type={"submit"}
+                        class="px-8 py-4"
                     >
                         {"Login"}
                     </Button>

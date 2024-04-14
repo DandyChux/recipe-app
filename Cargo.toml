@@ -1,5 +1,5 @@
 [workspace]
-members = ["server", "common", "client"]
+members = ["server", "common", "client", "ml"]
 # name = "music-recommendation"
 # version = "0.1.0"
 

@@ -11,6 +11,7 @@ axum-extra = { version = "0.9.2", features = ["cookie", "typed-header"] }
 bcrypt = "0.15.0"
 chrono = { version = "0.4.33", features = ["serde"] }
 common = { version = "0.1.0", path = "../common" }
+ml = { version = "0.1.0", path = "../ml" }
 dotenv = "0.15.0"
 jsonwebtoken = "9.2.0"
 oauth2 = "4.4.2"

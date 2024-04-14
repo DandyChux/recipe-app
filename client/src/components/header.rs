@@ -1,7 +1,8 @@
 use crate::{
     router::{self, Route}, 
     store::{set_loading, set_show_alert, Store, set_auth_user},
-    api::user_api::{api_logout_user}
+    api::user_api::{api_logout_user},
+    components::ui::search::Search,
 };
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
@@ -91,6 +92,7 @@ pub fn header_component(props: &HeaderProps) -> Html {
                     }
                 </ul>
             </nav>
+            <Search placeholder="Search..." />
         </header>
     }
 }

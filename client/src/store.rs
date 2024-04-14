@@ -1,8 +1,6 @@
-use common::schema::feedback::Feedback;
+use common::schema::{feedback::Feedback, song::Song, user::FilteredUser as User};
 use serde::{Deserialize, Serialize};
 use yewdux::prelude::*;
-
-use common::schema::user::FilteredUser as User;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize, Default, Clone)]
 pub struct AlertInput {
@@ -19,6 +17,8 @@ pub struct Store {
     pub auth_user: Option<User>,
     pub access_token: Option<String>,
     pub refresh_token: Option<String>,
+    pub search_input: String,
+    pub search_results: Vec<Song>
 }
 
 pub fn set_feedback(feedback: Feedback, dispatch: Dispatch<Store>) {
@@ -75,5 +75,29 @@ pub fn set_access_token(token: Option<String>, dispatch: Dispatch<Store>) {
 pub fn set_refresh_token(token: Option<String>, dispatch: Dispatch<Store>) {
     dispatch.reduce_mut(move |store| {
         store.refresh_token = token;
+    })
+}
+
+pub fn set_search_input(input: String, dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.search_input = input;
+    })
+}
+
+pub fn set_search_results(results: Vec<Song>, dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.search_results = results;
+    })
+}
+
+pub fn clear_search_results(dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.search_results.clear();
+    })
+}
+
+pub fn clear_search_input(dispatch: Dispatch<Store>) {
+    dispatch.reduce_mut(move |store| {
+        store.search_input.clear();
     })
 }
